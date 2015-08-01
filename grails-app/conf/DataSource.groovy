@@ -46,10 +46,10 @@ environments {
       //  url = "jdbc:mysql://aa1bzishuiat2fj.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=fusion&password=plp247619"
        //rahul dev url="jdbc:mysql://aaammt9ltjlzk9.cbj9zqqysdxf.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmedev"
 	 //ravi main
-	 //  url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"
+	   url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"
       // sandepani
 	 //  url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/sandeep?user=gimmedev&password=gimmepwd"
-	      url="jdbc:mysql://prod.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
+	    //  url="jdbc:mysql://prod.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
 	  
 	 //admin ravi	
         //url="jdbc:mysql://adminui.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"
@@ -70,22 +70,22 @@ environments {
   }
   production {
     dataSource {
-		
-      url = "jdbc:mysql://gimmetestdb.cbj9zqqysdxf.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimme&password=gimmepwd"
-      username = "gimme"
+      username = "gimmedev"
       password = "gimmepwd"
       pooled = true
-      dbCreate = "create"
+      dbCreate = "create-drop"
       driverClassName = "com.mysql.jdbc.Driver"
-      
-      /*username = "fusion"
-      password = "plp247619"
-      pooled = true
-      dbCreate = "update"
-      driverClassName = "com.mysql.jdbc.Driver"
-      url = "jdbc:mysql://aa1bzishuiat2fj.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=fusion&password=plp247619"
-      
-      */  dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+      //  url = "jdbc:mysql://aa1bzishuiat2fj.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=fusion&password=plp247619"
+       //rahul dev url="jdbc:mysql://aaammt9ltjlzk9.cbj9zqqysdxf.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmedev"
+	 //ravi main
+	 //  url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"
+      // sandepani
+	 //  url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/sandeep?user=gimmedev&password=gimmepwd"
+	      url="jdbc:mysql://prod.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
+	  
+	 //admin ravi	
+        //url="jdbc:mysql://adminui.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"
+        dialect = org.hibernate.dialect.MySQL5InnoDBDialect
         properties {
          validationQuery = "SELECT 1"
          testOnBorrow = true
@@ -94,11 +94,10 @@ environments {
          timeBetweenEvictionRunsMillis = 1800000
          numTestsPerEvictionRun = 3
          minEvictableIdleTimeMillis = 1800000
-        }
-        
-        
-        
-      
+         jdbcInterceptors = "ConnectionState"
+           defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_UNCOMMITTED
+         
+         }
     }
   }
 }

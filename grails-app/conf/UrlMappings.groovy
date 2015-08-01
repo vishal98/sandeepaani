@@ -515,7 +515,7 @@ re
 "/app/teacherEval/upload"(controller: "TeacherDetails" , action: "teacherEvaluationUpload" , parseRequest: true)
 "/app/student/ExcelUpload"(controller: "Mydata" , action: "studentExcelData" ,parseRequest: true)
 "/app/student/addStudent"(controller: "Mydata" , action: "addStudent" ,parseRequest: false)
-"/app/saveAlbums"(controller: "FileManagerWrite" , action: "saveAlbumFiles" ,parseRequest: false)
+"/app/saveAlbums"(controller: "FileManagerWrite" , action: "saveAlbumFiles" ,parseRequest: true)
 
 
 
