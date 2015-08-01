@@ -161,8 +161,8 @@ class HomeworkController extends RestfulController
 		
 		def rest = new RestBuilder()
 		def resp = rest.post("https://api.pushbots.com/push/all"){
-			header 'x-pushbots-appid', '550e9e371d0ab1de488b4569'
-			header 'x-pushbots-secret', 'e68461d7755b0d3733b4b36717aea77d'
+			   header 'x-pushbots-appid', '550e9e371d0ab1de488b4569'
+		   header 'x-pushbots-secret', 'e68461d7755b0d3733b4b36717aea77d'
 			json tagsM
 	  
 	}
@@ -172,7 +172,7 @@ class HomeworkController extends RestfulController
 	   }
    
 def tagsM
-   def tagList =[]
+   ArrayList<String> tagList =[]
    String homeWorkMsg
 	def saveHomework() {
 		tagList =[]
@@ -180,7 +180,7 @@ def tagsM
 
 			def gradeFlag = params.gradeFlag
 
-			Grade grade = Grade.findByNameAndSection(Integer.parseInt(params.grade), params.section)
+			Grade grade = Grade.findByNameAndSection(params.grade, params.section)
 			def subject = params.subject
 			Date date = formatter.parse(params.dueDate);
 			Student tempStudent
@@ -211,22 +211,19 @@ def tagsM
 				
 			} else if (gradeFlag == 'g') {
 			
-			
-		//	tagList<<"MAIL"
+		
 				data << new Homework(grade: grade, subject: subject, homework: params.homework, message: params.message, dueDate: date, gradeFlag: "g").save(flush: true)
 				output['status'] = 'success'
 				output['message'] = 'Homework details for class  successfully stored'
 				output['data'] = data
 				
 				
-				if(grade.gradetags!=null){
-					tagList<<grade.gradetags
-				}else{
+				//if(grade.gradetags!=null){
+					//tagList<<grade.gradetags
+				//}else{
 				grade.students.each{
-					tagList<<it.getFather().username
-					tagList<<it.getMother().username
-					
-				}
+						tagList<<it.getFather().username
+							tagList<<it.getMother().username
 				
 				}
 				//calling code
@@ -239,6 +236,8 @@ def tagsM
 				// render output as JSON
 			}
 		
+			
+			if(tagList!=null&& tagList.size>0){
 			 String [] tagi=tagList as Array
 			 String tag="check"
 			JsonBuilder json = new JsonBuilder ()
@@ -253,12 +252,11 @@ def tagsM
 		
 	  
 		  
-			
-		
+
 				testNotification(homeWorkMsg,req)
-	
+		}
 			
-			render req as JSON
+			render output as JSON
 		}
 		catch (Exception e) {
 			render e
