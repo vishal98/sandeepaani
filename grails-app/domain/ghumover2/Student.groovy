@@ -30,6 +30,7 @@ class Student  {
 	String religion
 	String house
     String otherLang
+	Long routeId
 	//String  medicalDetails
 	static belongsTo = [grade : Grade]
 
@@ -63,6 +64,7 @@ class Student  {
 		 religion(nullable:true)
 		 house(nullable:true)
 		 otherLang(nullable:true)
+		 routeId(nullable:true)
 	}
 
 	void setAsFather(Guardian father)

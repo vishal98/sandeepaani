@@ -200,7 +200,7 @@ class ExamDetailsController {
 						 grade : [gradeId : it.grade?.gradeId.toString() , gradeName: it.grade?.name , section : it.grade?.section] ,
 						 examSchedule : it.examSubjectSchedule.collect()    { ExamSchedule es -> [ subject:[ subjectId:  es.subject?.subjectId.toString() ,
 																											subjectName: es.subject?.subjectName ] ,
-																								  syllabus : [ id:es.subjectSyllabus?.id.toString() , syllabus: es.subjectSyllabus.syllabus] ,
+																								  syllabus : [ id:es.subjectSyllabus!=null?es.subjectSyllabus?.id.toString():'' , syllabus:es.subjectSyllabus!=null? es.subjectSyllabus?.syllabus:''] ,
 																								 examDate : es.startTime.format("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") ,
 																								 startTime : es.startTime.format("KK:mm a") ,
 																								 endTime: es.endTime.format("KK:mm a")]

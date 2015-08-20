@@ -18,9 +18,9 @@ class Conversation {
     String title
     Boolean inTrash
     Boolean isRead
-    @BindingFormat("dd-MM-yyyy")
+  //  @BindingFormat("dd-MM-yyyy")
     Date toDate
-    @BindingFormat("dd-MM-yyyy")
+    //@BindingFormat("dd-MM-yyyy")
 
 
 

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 class MyChildFile {
 
-	String fileId
+	Long fileId
 	String fileName
 	String filePath
 	String fileType

@@ -206,7 +206,11 @@ class UrlMappings {
 						action = "getTeacherList"
 					}
 
-
+					"/app/admin/users"
+					{
+						controller = "guardian"
+						action = "getTeacherList"
+					}
 					
 					
 				
@@ -602,6 +606,8 @@ re
 			 action = "getnotices"
 	 }
 		 
+		 
+		 
 		 "/app/registerForpush"(controller: "mydata", action: "registerForpushApp" ,parseRequest: true)
 		
 		
@@ -628,6 +634,8 @@ re
 		 
 		  "/api/guest/forgotPwd"(controller: "TeacherDetails", action: "forgetPassword" ,parseRequest: true)
 		  
+		  "/app/admin/forgetPasswordAdmin"(controller: "StudentDetails", action: "forgetPasswordAdmin" ,parseRequest: true)
+		  
 		  
 		  "/api/guest/fPwd"(controller: "StudentDetails", action: "forgetPassword" ,parseRequest: true)
 		  
@@ -639,6 +647,12 @@ re
 		  "/app/updateProfilePic"(controller: "FileManagerWrite", action: "updateProfilePic" ,parseRequest: true)
 		  
 		  
+		  "/app/locationDetails/$studentId"
+		  {
+			  controller = "LocationDetails"
+			  action = "getlocationDetails"
+
+		  }
 		  
 		  
 		 

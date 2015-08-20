@@ -186,7 +186,57 @@ def getStudentList(){
 					 roles.each {
 						  role=it.authority
 					 }
-					 if(role.equalsIgnoreCase(ROLE_PARENT)){
+					 def result = [:]
+					 def main=[]
+					 HashMap<String,Boolean> map=new HashMap<String,Boolean>()
+					 if(role.equalsIgnoreCase(ROLE_ADMIN)){
+						 
+						 def teachers =[]
+						//Guardian g= Guardian.findByUsername(user.username)
+					//	g.getChildren().each {
+						
+							def grd=GradeTeacherSubject.getAll()
+							
+							
+					        
+							grd.each{
+							  
+								
+								
+								if(map.get(it.teacher?.username) == null){
+									map.put(it.teacher?.username,true )
+									result = [:]
+								result["gradeId"] = it.grade?.gradeId.toString() 
+								result["gradename"]= it.grade?.name.toString()
+								result["username"] =it.teacher?.username
+								result["displayName"]=it.teacher.teacherName
+								main<<result
+								}
+								
+								
+								if(map.get(it.grade?.gradeId)==null){
+									map.put(it.grade?.gradeId.toString(),true )
+								
+								it.grade.students.each {
+									result = [:]
+									result["id"] = it.studentId.toString()
+									   result["username"] = it.father?it.father.username:it.mother.username
+										result["displayName"] = it.studentName+":"+it.studentId+":"+it.grade?.name+":"+it.grade?.section
+										result["EmailId"] = it.father?it.father.username:it.mother.username
+										result["phoneNo"] = it.father.mobileNumber
+					
+									main<<result
+								   
+									
+								}}
+							
+							}
+							
+						// }
+						render main as JSON
+							 }
+					 
+				else if(role.equalsIgnoreCase(ROLE_PARENT)){
 				 
 				 def teachers =[]
 				Guardian g= Guardian.findByUsername(user.username)	
@@ -211,8 +261,8 @@ def getStudentList(){
 					 Teacher t = Teacher.findByUsername(user.username)
 					
 					 def grd=GradeTeacherSubject.findAllByTeacher(t)
-					 def main=[]
-					 def result = [:]
+					  main=[]
+					  result = [:]
 					 grd.each{
 					 it.grade.students.each {
 						 result = [:]

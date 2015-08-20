@@ -1137,7 +1137,7 @@ class TeacherDetailsController extends RestfulController {
 		   try {
 	
 			   Teacher teacher = Teacher.get(Integer.parseInt(params.teacherId));
-			   Grade grade = Grade.findByNameAndSection(Integer.parseInt(params.grade), params.section);
+			   Grade grade = Grade.findByNameAndSection(params.grade, params.section);
 			   Subject subject
 			   params.subjects.each {
 	

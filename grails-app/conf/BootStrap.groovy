@@ -18,7 +18,7 @@ class BootStrap {
 	def dataSource
 	def init = { servletContext ->
 
-		// BOOTSTRAPING DATES
+		/*// BOOTSTRAPING DATES
 		def createQuery = "CREATE TABLE IF NOT EXISTS ints ( i tinyint unique );"
 		def insertQuery = "INSERT INTO ints (i) VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)   ON DUPLICATE KEY UPDATE i = VALUES(i);"
 		def insertCalenderDates = """\
@@ -105,7 +105,7 @@ class BootStrap {
 		school.landline = "0806754566"
 		school.save(flush:true);
 
-		/*
+		
 		 Subject english , hindi , chemistry , physics , computerScience , history , socialScience , biology , maths
 		 english = new Subject(subjectName: "English").save()
 		 hindi = new Subject(subjectName: "Hindi").save()
@@ -254,16 +254,23 @@ class BootStrap {
 		 vinod.addToGradeSubject(cl7A,socialScience)
 		 vinod.addToGradeSubject(cl7B,socialScience)
 		 def father , mother , local_guardian , s1 , s2 , s3
+		 
+		 //route details
+		 
+		 def rt=new Route( deviceNo:"1244",routeName:"test", schoolId:"1").save()
+		 def loc=new BusLocation(	locationData:"test",longitute:"12.9789659",latitude:"77.6981664", driverName:"ram", driverPhonenumber:"2324424",lastUpdated:new Date(),
+	  creationDate:new Date(),route:rt ).save()
+	  
 		 // FIRST STUDENT DETAILS
-		 s1 =  new Student(grade:cl5A  , registerNumber: "ST100" ,studentName: "Rohith" , gender: "Male" , dob:"12-12-2000" , studentPhoto: "photo.jpg", no_of_siblings: 2 , present_guardian: "Father" , present_address: (new Address(address: "Test Address" , landmark: "Karnatka" , place: "Kerala" ).save()) ).save()
+		 s1 =  new Student(grade:cl5A,routeId:rt.routeId  , registerNumber: "ST100" ,studentName: "Rohith" , gender: "Male" , dob:"12-12-2000" , studentPhoto: "photo.jpg", no_of_siblings: 2 , present_guardian: "Father" , present_address: (new Address(address: "Test Address" , landmark: "Karnatka" , place: "Kerala" ).save()) ).save()
 		 s1.setAsFather( new Guardian(name: "Ravi" , username: "ravi@test.com" , password: "123" , educational_qualification: "MBA" , designation: "Manager" , profession: "Private Employee" , emailId: "father@user.com" , officeNumber: "04868699000" , mobileNumber: "98470000" ).save() )
 		 s1.setAsMother( new Guardian(name:"Raani" , username: "raani@test.com" , password: "123" , educational_qualification: "Bcom" , designation: "College Professor" , profession: "Lecturer" , emailId: "mother@user.com" ,officeNumber: "0489898989" , mobileNumber: "94466797979"  ).save() )
 		 father = Guardian.findByUsername("ravi@test.com")
 		 mother = Guardian.findByUsername("raani@test.com")
-		 s2 =  new Student(grade: cl5B , registerNumber: "ST101" ,studentName: "Renjith" , gender: "Male" , dob:"12-12-2000" , studentPhoto: "photo.jpg", no_of_siblings: 2 , present_guardian: "Father" , present_address: (new Address(address: "Sample Address" , landmark: "Cochin" , place: "Kerala" ).save()) ).save()
+		 s2 =  new Student(grade: cl5B ,routeId:rt.routeId, registerNumber: "ST101" ,studentName: "Renjith" , gender: "Male" , dob:"12-12-2000" , studentPhoto: "photo.jpg", no_of_siblings: 2 , present_guardian: "Father" , present_address: (new Address(address: "Sample Address" , landmark: "Cochin" , place: "Kerala" ).save()) ).save()
 		 s2.setAsFather( father )
 		 s2.setAsMother( mother )
-		 s3 =  new Student(grade: cl6A ,  registerNumber: "ST102" ,studentName: "Rohan" , gender: "Male" , dob:"12-12-2000" , studentPhoto: "photo.jpg", no_of_siblings: 2 , present_guardian: "Father"  , present_address: new Address(address: "Sample Address" , landmark: "Cochin" , place: "Kerala" ).save()).save()
+		 s3 =  new Student(grade: cl6A ,routeId:rt.routeId,  registerNumber: "ST102" ,studentName: "Rohan" , gender: "Male" , dob:"12-12-2000" , studentPhoto: "photo.jpg", no_of_siblings: 2 , present_guardian: "Father"  , present_address: new Address(address: "Sample Address" , landmark: "Cochin" , place: "Kerala" ).save()).save()
 		 s3.setAsFather( father )
 		 s3.setAsMother( mother )
 		 new UserRole(user:father , role:roleParent).save(flush: true)
@@ -376,91 +383,91 @@ class BootStrap {
 		 new ExamResult(exam: publicExam , student: Student.findByStudentName("Bony") , subject:english , marks: 70 , maxMarks: 100 ).save()
 		 new ExamResult(exam: publicExam , student: Student.findByStudentName("Bony") , subject:hindi , marks: 80 , maxMarks: 100 ).save()
 		 new ExamResult(exam: publicExam , student: Student.findByStudentName("Bony") , subject:chemistry , marks: 60 , maxMarks: 100 ).save()
-		 cl6A.addToTimetable(new TimeTable(grade: cl6A , day: "Monday" , teacher:mathew , subject: maths , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl7A.addToTimetable(new TimeTable(grade: cl7A , day: "Monday" , teacher:mathew , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl8A.addToTimetable(new TimeTable(grade: cl8A , day: "Monday" , teacher:mathew , subject: science , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl9A.addToTimetable(new TimeTable(grade: cl9A , day: "Monday" , teacher:mathew , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:archana , subject: maths , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:sheetal , subject: science , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:kiran , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:naresh , subject: socialScience , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:ptTeacher , subject: pt , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:kiran , subject: IILanguage , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:archana , subject: maths , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:naresh , subject: socialScience , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:vanajakshi , subject: ILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:archana , subject: maths , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:ptTeacher , subject: pt , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:archana , subject: maths , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:kiran , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:naresh , subject: socialScience , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:archana , subject: IILanguage , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:vanajakshi , subject: maths , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:kiran , subject: ILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:naresh , subject: maths , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:sheetal , subject: science , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:kiran , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:naresh , subject: socialScience , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
+		 cl6A.addToTimetable(new TimeTable(grade: cl6A , day: "Monday" , teacher:mathew , subject: maths , startTime: "07:30:AM" , endTime: "08:00:AM")).save()
+		 cl7A.addToTimetable(new TimeTable(grade: cl7A , day: "Monday" , teacher:mathew , subject: ILanguage , startTime: "08:00:AM" , endTime: "09:00:AM")).save()
+		 cl8A.addToTimetable(new TimeTable(grade: cl8A , day: "Monday" , teacher:mathew , subject: science , startTime: "09:00:AM" , endTime: "10:00:AM")).save()
+		 cl9A.addToTimetable(new TimeTable(grade: cl9A , day: "Monday" , teacher:mathew , subject: IILanguage , startTime: "10:30:AM" , endTime: "11:30:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:archana , subject: maths , startTime: "07:30:AM" , endTime: "08:00:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00:AM" , endTime: "09:00:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:sheetal , subject: science , startTime: "09:00:AM" , endTime: "10:00:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:kiran , subject: IILanguage , startTime: "10:30:AM" , endTime: "11:30:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:naresh , subject: socialScience , startTime: "11:30:AM" , endTime: "12:30:PM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:archana , subject: maths , startTime: "01:00:PM" , endTime: "02:00:PM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:ptTeacher , subject: pt , startTime: "02:00:PM" , endTime: "03:00:PM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Monday" , teacher:mathew , subject: activities , startTime: "03:00:PM" , endTime: "03:30:PM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:kiran , subject: IILanguage , startTime: "07:30:AM" , endTime: "08:00:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:archana , subject: maths , startTime: "08:00:AM" , endTime: "09:00:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:naresh , subject: socialScience , startTime: "09:00:AM" , endTime: "10:00:AM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:vanajakshi , subject: ILanguage , startTime: "10:30:AM" , endTime: "11:30:AM")).save()
+		// cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:archana , subject: maths , startTime: "11:30:AM" , endTime: "12:30:PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 PM")).save()
+		 //l5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:ptTeacher , subject: pt , startTime: "02:00 :PM" , endTime: "03:00 ::PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Tuesday" , teacher:mathew , subject: activities , startTime: "03:00:PM" , endTime: "03:30:PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:archana , subject: maths , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:kiran , subject: IILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:naresh , subject: socialScience , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Wednesday" , teacher:mathew , subject: activities , startTime: "03:00:PM" , endTime: "03:30:PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:archana , subject: IILanguage , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:vanajakshi , subject: maths , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:kiran , subject: ILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:naresh , subject: maths , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Thursday" , teacher:mathew , subject: activities , startTime: "03:00:PM" , endTime: "03:30:PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:sheetal , subject: science , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:kiran , subject: IILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:naresh , subject: socialScience , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 //cl5A.addToTimetable(new TimeTable(grade: cl5A , day: "Friday" , teacher:mathew , subject: activities , startTime: "03:00 :PM" , endTime: "03:30 :PM")).save()
 		 // 5b
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:archana , subject: maths , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:sheetal , subject: science , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:kiran , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:naresh , subject: socialScience , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:ptTeacher , subject: pt , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:kiran , subject: IILanguage , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:archana , subject: maths , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:naresh , subject: socialScience , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:vanajakshi , subject: ILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:archana , subject: maths , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:ptTeacher , subject: pt , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:archana , subject: maths , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:kiran , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:naresh , subject: socialScience , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:archana , subject: IILanguage , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:vanajakshi , subject: maths , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:kiran , subject: ILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:naresh , subject: maths , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:sheetal , subject: science , startTime: "07:30 AM" , endTime: "08:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 AM" , endTime: "09:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "09:00 AM" , endTime: "10:00 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:kiran , subject: IILanguage , startTime: "10:30 AM" , endTime: "11:30 AM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:naresh , subject: socialScience , startTime: "11:30 AM" , endTime: "12:30 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:archana , subject: maths , startTime: "01:00 PM" , endTime: "02:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "02:00 PM" , endTime: "03:00 PM")).save()
-		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:mathew , subject: activities , startTime: "03:00 PM" , endTime: "03:30 PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:archana , subject: maths , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:sheetal , subject: science , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:kiran , subject: IILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:naresh , subject: socialScience , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:ptTeacher , subject: pt , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Monday" , teacher:mathew , subject: activities , startTime: "03:00 :PM" , endTime: "03:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:kiran , subject: IILanguage , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:archana , subject: maths , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:naresh , subject: socialScience , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:vanajakshi , subject: ILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:archana , subject: maths , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:ptTeacher , subject: pt , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Tuesday" , teacher:mathew , subject: activities , startTime: "03:00 :PM" , endTime: "03:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:archana , subject: maths , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:kiran , subject: IILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:naresh , subject: socialScience , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:sheetal , subject: science , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Wednesday" , teacher:mathew , subject: activities , startTime: "03:00 :PM" , endTime: "03:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:archana , subject: IILanguage , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:vanajakshi , subject: maths , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:kiran , subject: ILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:naresh , subject: maths , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:sheetal , subject: pt , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Thursday" , teacher:mathew , subject: activities , startTime: "03:00 :PM" , endTime: "03:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:sheetal , subject: science , startTime: "07:30 :AM" , endTime: "08:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:vanajakshi , subject: ILanguage , startTime: "08:00 :AM" , endTime: "09:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "09:00 :AM" , endTime: "10:00 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:kiran , subject: IILanguage , startTime: "10:30 :AM" , endTime: "11:30 :AM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:naresh , subject: socialScience , startTime: "11:30 :AM" , endTime: "12:30 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:archana , subject: maths , startTime: "01:00 :PM" , endTime: "02:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:vanajakshi , subject: clubAct , startTime: "02:00 :PM" , endTime: "03:00 :PM")).save()
+		 cl5B.addToTimetable(new TimeTable(grade: cl5B , day: "Friday" , teacher:mathew , subject: activities , startTime: "03:00 :PM" , endTime: "03:30 :PM")).save()
 		 User ravi , rani , manish , malini , mahadev , shashi
 		
 		 ravi = User.findByUsername("ravi@test.com")
@@ -541,32 +548,31 @@ class BootStrap {
 		 
 
 
-		
+	
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1454,7 +1460,7 @@ class BootStrap {
 				examSchedule : e.examSubjectSchedule.collect()    { ExamSchedule es ->
 					[ subject:[ subjectId:  es.subject?.subjectId.toString() ,
 							subjectName: es.subject?.subjectName ] ,
-						syllabus : [ id:es.subjectSyllabus?.id.toString() , syllabus: es.subjectSyllabus.syllabus] ,
+						syllabus : [ id:es.subjectSyllabus!=null?es.subjectSyllabus?.id.toString():'' , syllabus:es.subjectSyllabus!=null? es.subjectSyllabus?.syllabus:''] ,
 						examDate : es.startTime.format("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") ,
 						startTime : es.startTime.format("KK:mm a") ,
 						endTime: es.endTime.format("KK:mm a")]
@@ -1666,7 +1672,29 @@ class BootStrap {
 				]
 			}
 
-
+			JSON.createNamedConfig('busDetails')
+			{
+	
+	
+				it.registerObjectMarshaller( BusLocation  )
+				{
+		 t ->
+				return [
+			     "status":"success",
+				 "message":"route present",
+				 "location":[
+				  "driverName":t.driverName,
+				  "driverPhonenumber": t.driverPhonenumber,
+				  "intialLatitude":t.intialLatitude!=null?t.intialLatitude:"",
+				  "intialLongitute": t.intialLongitute!=null?t.intialLongitute:"",
+				  "lastUpdated":t.lastUpdated,
+				  "currentLatitude":t.latitude,
+				  "currentLongitute": t.longitute
+				  ]
+				
+			  ]
+			}
+			}
 			def destroy = {
 			}
 		}

@@ -29,22 +29,21 @@ class TimeTableDetailsController {
                     days.each {
 						
 						def timeTableSort=TimeTable.findAllByGradeAndDay(grade,it)
-						Collections.sort(timeTableSort, new Comparator<TimeTable>() {
-							private SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm:a");
-							@Override
-							public int compare(TimeTable o1, TimeTable o2) {
-								int result = -1;
-			
-								try {
-			
-									result = sdf.parse(o1.startTime).compareTo(sdf.parse(o2.startTime));
-								} catch (ParseException ex) {
-									ex.printStackTrace();
+						 Collections.sort(timeTableSort, new Comparator<TimeTable>() {
+								private SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm:a");
+								@Override
+								public int compare(TimeTable o1, TimeTable o2) {
+									int result = -1;
+									try {
+		
+										result =  (sdf.parse(o1.startTime).getTime()).compareTo( (sdf.parse(o2.startTime)).getTime());
+									} catch (ParseException ex) {
+										ex.printStackTrace();
+									}
+		
+									return result;
 								}
-			
-								return result;
-							}
-						});
+							});
                         response[it] = timeTableSort
                     }
 
@@ -64,7 +63,23 @@ class TimeTableDetailsController {
         JSON.use('getTimeTable')
                 {
                     def grade = Grade.findByNameAndSection(params.gradeId, params.section)
-                    def result = TimeTable.findAllByGradeAndDay(grade, day)
+					def timeTableSort=TimeTable.findAllByGradeAndDay(grade, day)
+					Collections.sort(timeTableSort, new Comparator<TimeTable>() {
+						   private SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm:a");
+						   @Override
+						   public int compare(TimeTable o1, TimeTable o2) {
+							   int result = -1;
+							   try {
+   
+								   result =  (sdf.parse(o1.startTime).getTime()).compareTo( (sdf.parse(o2.startTime)).getTime());
+							   } catch (ParseException ex) {
+								   ex.printStackTrace();
+							   }
+   
+							   return result;
+						   }
+					   });
+                    def result = timeTableSort
                     render result as JSON
                 }
 
@@ -86,22 +101,23 @@ class TimeTableDetailsController {
             Teacher teacher = Teacher.findByUsername(user.username)
 			
 			def timeTableSort=teacher.timetables
-			Collections.sort(timeTableSort, new Comparator<TimeTable>() {
-				private SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm:a");
-				@Override
-				public int compare(TimeTable o1, TimeTable o2) {
-					int result = -1;
-
-					try {
-
-						result = sdf.parse(o1.startTime).compareTo(sdf.parse(o2.startTime));
-					} catch (ParseException ex) {
-						ex.printStackTrace();
-					}
-
-					return result;
-				}
-			});
+					 Collections.sort(timeTableSort, new Comparator<TimeTable>() {
+								private  sdf = new java.text.SimpleDateFormat("hh:mm:a");
+								@Override
+								public int compare(TimeTable o1, TimeTable o2) {
+									int result = -1;
+									try {
+		
+										result =  (sdf.parse(o1.startTime).getTime()).compareTo( (sdf.parse(o2.startTime)).getTime());
+									} catch (ParseException ex) {
+										ex.printStackTrace();
+									}
+		
+									return result;
+								}
+							});
+                        
+		
 			
             JSON.use('teacherWeekTT')
                     {
@@ -131,15 +147,15 @@ class TimeTableDetailsController {
             String day = params.day
 			
 			def timeTableSort=TimeTable.findAllByTeacherAndDay(teacher,day)
+		
 			Collections.sort(timeTableSort, new Comparator<TimeTable>() {
-				private SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm:a");
+				private  sdf = new java.text.SimpleDateFormat("hh:mm:a");
 				@Override
 				public int compare(TimeTable o1, TimeTable o2) {
 					int result = -1;
-
 					try {
 
-						result = sdf.parse(o1.startTime).compareTo(sdf.parse(o2.startTime));
+						result =  (sdf.parse(o1.startTime).getTime()).compareTo( (sdf.parse(o2.startTime)).getTime());
 					} catch (ParseException ex) {
 						ex.printStackTrace();
 					}
@@ -147,9 +163,10 @@ class TimeTableDetailsController {
 					return result;
 				}
 			});
+	
             output['teacherId'] = teacher.id.toString()
             output['teacherName'] = teacher.teacherName
-            output['timeTable'] =  TimeTable.findAllByTeacherAndDay(teacher,day)
+            output['timeTable'] =  timeTableSort
             render output as JSON
 
         }
@@ -160,82 +177,63 @@ class TimeTableDetailsController {
 
     }
 
-
-	
-	def getclassTimetableList()
-	{
-  
-		def classTT = [:]
-		def output = new ArrayList()
-		def timetables = new ArrayList()
-		def temp=[:]
-  
-		ArrayList<TimeTable> timeTableSort = new ArrayList<TimeTable>();
-  
-		Grade grade
-		try{
-			def days = TimeTable.executeQuery("select distinct a.day from TimeTable a ")
-  
-			Grade.findAll().each {
-  
-				grade = it
-				classTT['gradeId'] = it.gradeId.toString()
-				classTT['gradeName'] = it.name.toString()
-				classTT['section'] = it.section
-  
-  
-				days.each {
-					temp['day'] = it
-  
-					timeTableSort = TimeTable.findAllByGradeAndDay(grade,it)
-  
-  
-  
-					Collections.sort(timeTableSort, new Comparator<TimeTable>() {
-						private SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm:a");
-						@Override
-						public int compare(TimeTable o1, TimeTable o2) {
-							int result = -1;
-  
-							try {
-  
-								result = sdf.parse(o1.startTime).compareTo(sdf.parse(o2.startTime));
-							} catch (ParseException ex) {
-								ex.printStackTrace();
-							}
-  
-							return result;
+	def getclassTimetableList() {
+		
+				def classTT = [:]
+				def output = new ArrayList()
+				def timetables = new ArrayList()
+				def temp = [:]
+		
+				ArrayList<TimeTable> timeTableSort = new ArrayList<TimeTable>();
+		
+				Grade grade
+				try {
+					def days = TimeTable.executeQuery("select distinct a.day from TimeTable a ")
+		
+						Grade.findAll().each {
+						grade = it
+						classTT['gradeId'] = it.gradeId.toString()
+						classTT['gradeName'] = it.name.toString()
+						classTT['section'] = it.section
+						days.each {
+							temp['day'] = it
+		
+							timeTableSort = TimeTable.findAllByGradeAndDay(grade, it)
+							 Collections.sort(timeTableSort, new Comparator<TimeTable>() {
+								private  sdf = new java.text.SimpleDateFormat("hh:mm:a");
+								@Override
+								public int compare(TimeTable o1, TimeTable o2) {
+									int result = -1;
+									try {
+		
+										result =  (sdf.parse(o1.startTime).getTime()).compareTo( (sdf.parse(o2.startTime)).getTime());
+									} catch (ParseException ex) {
+										ex.printStackTrace();
+									}
+		
+									return result;
+								}
+							});
+							temp['hours'] = timeTableSort;
+							timetables.push(temp)
+							temp = [:]
+		
 						}
-					});
-  
-  
-  
-  
-					temp['hours'] = timeTableSort;
-					timetables.push(temp)
-					temp = [:]
-  
+						classTT['timetables'] = timetables
+						output.push(classTT)
+						classTT = [:]
+						timetables = new ArrayList()
+						temp = [:]
+					}
+					render output as JSON
 				}
-				classTT['timetables'] = timetables
-				output.push(classTT)
-				classTT = [:]
-				timetables = new ArrayList()
-				temp = [:]
-  
-  
+				catch (Exception e) {
+					render e as JSON
+				}
 			}
-  
-  
-			render output as JSON
-  
-  
-  
-		}
-		catch(Exception e)
-		{
-			render e as JSON
-		}
-	}
+	
+	
+	
   
 
 

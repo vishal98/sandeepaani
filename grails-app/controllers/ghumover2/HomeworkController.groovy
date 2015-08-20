@@ -192,15 +192,17 @@ def tagsM
 			 if (gradeFlag == 's') {
 				params.studentList.each { studentId ->
 					tempStudent = Student.get(studentId)
+					if(tempStudent!=null){
 					data << new Homework(grade: grade, subject: subject, homework: params.homework, student: tempStudent, message: params.message, dueDate: date, gradeFlag: "s").save(flush: true)
-					if(tempStudent!=null&&tempStudent.getFather()!=null)
+					if(tempStudent.getFather()!=null){
 					if(tempStudent.getFather().username!=null){
 					tagList<<tempStudent.getFather().username
-					}
+					}}
+					if(tempStudent.getMother()!=null){
 					if(tempStudent.getMother().username!=null){
 					tagList<<tempStudent.getMother().username
-					}
-					tagList<<"check"
+					}}}
+					//tagList<<"check"
 					
 				}
 				output['status'] = 'success'
@@ -221,11 +223,15 @@ def tagsM
 				//if(grade.gradetags!=null){
 					//tagList<<grade.gradetags
 				//}else{
+				if(grade!=null&& grade.students!=null && grade.students.size()>O){
 				grade.students.each{
+					if(it.getFather()!=null){
 						tagList<<it.getFather().username
+					}
+					if(it.getMother()!=null){
 							tagList<<it.getMother().username
-				
-				}
+					}
+				}}
 				//calling code
 				
 				homeWorkMsg ="Homework for class "+ params.grade+ " added"
@@ -253,7 +259,7 @@ def tagsM
 	  
 		  
 
-				testNotification(homeWorkMsg,req)
+		//		testNotification(homeWorkMsg,req)
 		}
 			
 			render output as JSON

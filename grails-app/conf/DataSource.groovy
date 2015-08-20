@@ -18,11 +18,17 @@ hibernate {
 environments {
   development {
     dataSource {
-        dbCreate = "create-drop"
+		   username = "gimmedev"
+      password = "gimmepwd"
+      pooled = true
+      dbCreate = ""
+      driverClassName = "com.mysql.jdbc.Driver"
+    	      url="jdbc:mysql://prodmain.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
+   //     dbCreate = "create-drop"
 		//dbCreate = "update"
-		url = "jdbc:mysql://localhost/mychild"
-        	username = "root"
-			password = "admin"
+	//	url = "jdbc:mysql://localhost/mychild"
+      //  	username = "root"
+		//	password = "admin"
 			properties {
 				validationQuery = "SELECT 1"
 				testOnBorrow = true
@@ -73,15 +79,9 @@ environments {
       username = "gimmedev"
       password = "gimmepwd"
       pooled = true
-      dbCreate = "create-drop"
+      dbCreate = ""
       driverClassName = "com.mysql.jdbc.Driver"
-      //  url = "jdbc:mysql://aa1bzishuiat2fj.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=fusion&password=plp247619"
-       //rahul dev url="jdbc:mysql://aaammt9ltjlzk9.cbj9zqqysdxf.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmedev"
-	 //ravi main
-	 //  url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"
-      // sandepani
-	 //  url="jdbc:mysql://mychildmain.cbf4otxzdwmr.ap-southeast-1.rds.amazonaws.com:3306/sandeep?user=gimmedev&password=gimmepwd"
-	      url="jdbc:mysql://prod.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
+    	      url="jdbc:mysql://prodmain.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
 	  
 	 //admin ravi	
         //url="jdbc:mysql://adminui.c3m5mgrxcx6j.ap-southeast-1.rds.amazonaws.com:3306/ebdb?user=gimmedev&password=gimmepwd"

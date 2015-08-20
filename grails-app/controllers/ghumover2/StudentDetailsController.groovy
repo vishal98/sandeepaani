@@ -1,6 +1,7 @@
 package ghumover2
 
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured;
 import grails.rest.RestfulController
 import groovy.json.JsonSlurper
 
@@ -18,6 +19,7 @@ class StudentDetailsController extends RestfulController  {
 	private static final String ROLE_PARENT = 'ROLE_PARENT'
 	private static final String ROLE_ADMIN = 'ROLE_ADMIN'
 	
+	@Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def forgetPassowrd(){
 		String emailId = params.emailId
 	//	String newPassword = params.password_new
@@ -38,6 +40,37 @@ class StudentDetailsController extends RestfulController  {
 	}
 	
 	
+	def forgetPasswordAdmin(){
+//	User	user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null
+		User user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null
+				 	Set<Role> roles=user.getAuthorities()
+					 String role
+					 roles.each {
+						  role=it.authority
+					 }
+					 if(role.equalsIgnoreCase(ROLE_ADMIN)){
+		String emailId = params.emailId
+	//	String newPassword = params.password_new
+		println "test this {{emailId}}"
+		def message
+		def result = [:]
+		User user2=User.findByUsername(emailId)
+		if(user){
+			user2.password="1234"
+			user2.save()
+			//sendMail
+					result['status'] = 'success'
+			result['message']="password changed"
+		    render result as JSON
+		}else{
+		
+		result['status'] = 'error'
+		result['message']="email id is not valid"
+		
+		}
+					 }
+		render message as JSON
+	}
 	
 	
 	def updatePassword() {
