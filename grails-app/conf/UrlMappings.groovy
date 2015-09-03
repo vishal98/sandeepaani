@@ -396,6 +396,11 @@ class UrlMappings {
 								}
 			
 			
+			//mail Delete
+						"/app/conversations/delete/$threadId"
+								{
+									controller = "conversation"
+									action = "deleteConversation"
 			
 			
 						//  Teacher events

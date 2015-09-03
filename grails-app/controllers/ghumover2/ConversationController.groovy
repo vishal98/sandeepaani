@@ -3,13 +3,8 @@ package ghumover2
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import groovy.json.JsonBuilder
-
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone;
-
 import static grails.async.Promises.task
 
 
@@ -33,7 +28,7 @@ class ConversationController {
 
 
 			JSON.use('msgList'){
-			    def inbox = Conversation.findAllByToId(user.username)
+			    def inbox = Conversation.findAllByToIdAndToFlag(user.username, true)
 
 				output ['numberOfConversations'] = inbox.size()
 				output ['conversations'] =  inbox
@@ -74,7 +69,7 @@ class ConversationController {
 			user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null
 
 			JSON.use('msgList'){
-				def sentbox = Conversation.findAllByFromId(user.username)
+				def sentbox = Conversation.findAllByFromIdAndFromFlag(user.username, true)
 
 				output ['numberOfConversations'] = sentbox.size().toString()
 				output ['conversations'] =  sentbox
@@ -147,7 +142,12 @@ class ConversationController {
 			user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null
 			User fromUser =  (params.userId)? ( (params.userId.isNumber()) ? (User.findById(Long.parseLong(params.userId))) : User.findByUsername(params.userId) )   : null;
 
-			def conv = Conversation.findAllByFromIdAndToId(fromUser.username,user.username)
+	//		def conv = Conversation.findAllByFromIdAndToId(fromUser.username,user.username)
+			def conv = []
+			def conv1 = Conversation.findAllByFromIdAndFromFlag(fromUser.username,true)
+			def conv2 = Conversation.findAllByToIdAndToFlag(user.username, true)
+			conv.addAll(conv1)
+			conv.addAll(conv2)
 			JSON.use('msgList'){
 				output ['numberOfConversations'] = conv.size()
 				output ['conversations'] =  conv
@@ -182,7 +182,12 @@ class ConversationController {
 			User toUser =  (params.toId)? ( (params.toId.isNumber()) ? (User.findById(Long.parseLong(params.toId))) : User.findByUsername(params.toId) )   : null;
 			User fromUser =  (params.fromId)? ( (params.fromId.isNumber()) ? (User.findById(Long.parseLong(params.fromId))) : User.findByUsername(params.fromId) )   : null;
 
-			def conv = Conversation.findAllByFromIdAndToId(fromUser.username,toUser.username)
+	//		def conv = Conversation.findAllByFromIdAndToId(fromUser.username,toUser.username)
+			def conv = []
+			def conv1 = Conversation.findAllByFromIdAndFromFlag(fromUser.username,true)
+			def conv2 = Conversation.findAllByToIdAndToFlag(toUser.username, true)
+			conv.addAll(conv1)
+			conv.addAll(conv2)
 			JSON.use('msgList'){
 				output ['numberOfConversations'] = conv.size()
 				output ['conversations'] =  conv
@@ -271,20 +276,18 @@ class ConversationController {
 			User fromUser =  (params.fromId)? ( (params.fromId.isNumber()) ? (User.findById(Long.parseLong(params.fromId))) : User.findByUsername(params.fromId) )   : null;
 			String msg = params.messageText
 			String title = params.title
-			//SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 			//DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z");
-			DateTime dt = new DateTime();
-			DateTime dtInd = dt.withZone(DateTimeZone.forID("Asia/Kolkata"));
 			//Date date = new Date();
 			//sdf.setTimeZone(TimeZone.getTimeZone("IST"));
-		    Date today=dtInd.toDate()
-			Conversation conversation = new Conversation(fromId: fromUser.username , toId: toUser.username ,fromName:fromUser.name,toName:toUser.name, title: title , inTrash: false,isRead: false ,toDate: today )
+		  //  Date today=sdf.format(date)
+			Conversation conversation = new Conversation(fromId: fromUser.username , toId: toUser.username ,fromName:fromUser.name,toName:toUser.name, title: title , inTrash: false,isRead: false ,toDate: new Date(), toFlag:true, fromFlag: true )
 										.addToMessages(new Message(messageText: msg , messageTime: new Date() , fromId: fromUser.name , toId: toUser.name))
 										.save()
 
 
 			fromUser.addToConversations(conversation).save()
 			toUser.addToConversations(conversation).save()
+			
 
 
 			output['status'] = "success"
@@ -407,7 +410,7 @@ class ConversationController {
  
  
 			 JSON.use('conversationVer1'){
-				 def inbox = Conversation.findAllByToId(user.username)
+				 def inbox = Conversation.findAllByToIdAndToFlag(user.username, true)
  
 				 output ['numberOfConversations'] = inbox.size()
 				 output ['conversations'] =  inbox
@@ -418,7 +421,7 @@ class ConversationController {
 		 }
 		 else
 		 {
-			 
+ 
 			 output['status'] = "error"
 			 output['message'] = "Not logged in"
 			 output['data'] = "NULL"
@@ -428,11 +431,91 @@ class ConversationController {
  
 	 }
 	 
+	/* def deleteConversation(){
+		 def con = Conversation.findAllByToFlagAndFromFlag(false,false)
+		 Iterator itr = con.iterator()
+		 while(itr.hasNext()){
+			 Conversation c = itr.next()
+			long tId = c.threadId
+			String fU = c.fromId
+			String tU = c.toId
+			User fromUser = User.findByUsername(fU)
+			User toUser = User.findByUsername(tU)
+			toUser.removeFromConversations(con)
+			fromUser.removeFromConversations(con)
+			Message.findAllByThreadId(con).each {
+				long mId = it.messageId
+				Message.executeUpdate("Alter Message delete row where messageId = msgToDel",[msgToDel :mId])
+			}
+			Conversation.executeUpdate("Alter Conversation delete row where threadId = convToDel",[convToDel :tId])
+		 }
+		 user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null ;
+		 String uId=user.username;
+		 String toId, fromId
+		  Long thId = Long.parseLong(params.threadId)
+		  Conversation.findByThreadId(thId).each{
+			 toId= it.toId
+			 fromId= it.fromId
+		  }
+		  if(uId.equalsIgnoreCase(toId)){
+   			   Conversation.executeUpdate("UPDATE Conversation SET toFlag=false WHERE threadId = :convToDelete ",[convToDelete : thId]).save()
+			  
+		  }else if(uId.equalsIgnoreCase(fromId)){
+			   Conversation.executeUpdate("UPDATE Conversation SET fromFlag=false WHERE threadId = :convToDelete ",[convToDelete : thId]).save()
+		  }
+		  
+		 
+		  
+	 }*/
+	 def deleteConversation(){
+		 user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null ;
+		String uId=user.username;
+		String toId, fromId
+		 Long thId = Long.parseLong(params.threadId)
+		 try{
+			 Conversation.findByThreadId(thId).each{
+			 toId= it.toId
+			 fromId= it.fromId
+				 }
+			 if(uId.equalsIgnoreCase(toId)){
+				 Conversation.executeUpdate("UPDATE Conversation SET toFlag=false WHERE threadId = :convToDelete ",[convToDelete : thId])
+			 
+			 }else if(uId.equalsIgnoreCase(fromId)){
+			  Conversation.executeUpdate("UPDATE Conversation SET fromFlag=false WHERE threadId = :convToDelete ",[convToDelete : thId])
+			 }
+		 
+			 def con = Conversation.findAllByToFlagOrFromFlag(false,false)
+			 Iterator itr = con.iterator()
+			 while(itr.hasNext()){
+				 Conversation c = itr.next()
+				 long tId = c.threadId
+				 def convMsgz = c.messages
+			
+				 String fUser = c.fromId
+				 String tUser = c.toId
+				 User fromUser = User.findByUsername(fUser)
+				 User toUser = User.findByUsername(tUser)
+				 def convFrom = fromUser.conversations.findAll{it.fromFlag==false}
+				 def convTo = toUser.conversations.findAll{it.toFlag==false}
+				 fromUser.conversations.removeAll(convFrom)
+				 toUser.conversations.removeAll(convTo)
+				 if( c.toFlag==false && c.fromFlag==false){
+					 Iterator itt = convMsgz.iterator()
+					 while(itt.hasNext()){
+						 Message msz = itt.next()
+						 long mszId= msz.messageId
+						 Message.executeUpdate("Delete Message where messageId ="+ mszId +" ")
+						 }
+				 
+				 Conversation.executeUpdate("Delete Conversation where threadId ="+ tId +" ")
+				 }
+			 }
+		 }catch(Exception ex){
+			 ex.printStackTrace()
+			 }
+		 
+	}
 	 
  
-
-
-
-
 
 }
