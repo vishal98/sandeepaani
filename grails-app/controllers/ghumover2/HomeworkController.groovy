@@ -259,7 +259,7 @@ def tagsM
 	  
 		  
 
-		//		testNotification(homeWorkMsg,req)
+				testNotification(homeWorkMsg,req)
 		}
 			
 			render output as JSON

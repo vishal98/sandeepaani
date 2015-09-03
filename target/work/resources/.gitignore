@@ -1,1 +1,4 @@
 /Config.groovy
+/hibernate/
+/spring/
+/.gitignore

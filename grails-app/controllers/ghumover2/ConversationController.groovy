@@ -3,8 +3,13 @@ package ghumover2
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import groovy.json.JsonBuilder
+
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone;
+
 import static grails.async.Promises.task
 
 
@@ -266,11 +271,14 @@ class ConversationController {
 			User fromUser =  (params.fromId)? ( (params.fromId.isNumber()) ? (User.findById(Long.parseLong(params.fromId))) : User.findByUsername(params.fromId) )   : null;
 			String msg = params.messageText
 			String title = params.title
+			//SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 			//DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z");
+			DateTime dt = new DateTime();
+			DateTime dtInd = dt.withZone(DateTimeZone.forID("Asia/Kolkata"));
 			//Date date = new Date();
 			//sdf.setTimeZone(TimeZone.getTimeZone("IST"));
-		  //  Date today=sdf.format(date)
-			Conversation conversation = new Conversation(fromId: fromUser.username , toId: toUser.username ,fromName:fromUser.name,toName:toUser.name, title: title , inTrash: false,isRead: false ,toDate: new Date() )
+		    Date today=dtInd.toDate()
+			Conversation conversation = new Conversation(fromId: fromUser.username , toId: toUser.username ,fromName:fromUser.name,toName:toUser.name, title: title , inTrash: false,isRead: false ,toDate: today )
 										.addToMessages(new Message(messageText: msg , messageTime: new Date() , fromId: fromUser.name , toId: toUser.name))
 										.save()
 
@@ -410,7 +418,7 @@ class ConversationController {
 		 }
 		 else
 		 {
- 
+			 
 			 output['status'] = "error"
 			 output['message'] = "Not logged in"
 			 output['data'] = "NULL"

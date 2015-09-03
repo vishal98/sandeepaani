@@ -17,8 +17,8 @@ class BootStrap {
 
 	def dataSource
 	def init = { servletContext ->
-
-		/*// BOOTSTRAPING DATES
+/*
+		// BOOTSTRAPING DATES
 		def createQuery = "CREATE TABLE IF NOT EXISTS ints ( i tinyint unique );"
 		def insertQuery = "INSERT INTO ints (i) VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)   ON DUPLICATE KEY UPDATE i = VALUES(i);"
 		def insertCalenderDates = """\

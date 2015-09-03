@@ -15,8 +15,9 @@ class Notice {
 	String salutation
 	String createBy
 	String signoffWord
+	long classId
 	
-    static constraints = {
+	static constraints = {
 		topic(nullable: true)
 		message(nullable: true)
 		senderName(nullable: true)
@@ -26,9 +27,11 @@ class Notice {
 		salutation(nullable: true)
 		createBy(nullable: true)
 		signoffWord(nullable: true)
+		classId(nullable: true)
+		
 
 
-    }
+	}
 	def beforeInsert() {
 		date = new Date()
 		Calendar calendar = Calendar.getInstance();

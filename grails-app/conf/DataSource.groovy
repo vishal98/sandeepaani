@@ -18,17 +18,17 @@ hibernate {
 environments {
   development {
     dataSource {
-		   username = "gimmedev"
-      password = "gimmepwd"
+		//   username = "gimmedev"
+      //password = "gimmepwd"
       pooled = true
-      dbCreate = ""
+     // dbCreate = ""
       driverClassName = "com.mysql.jdbc.Driver"
-    	      url="jdbc:mysql://prodmain.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
-   //     dbCreate = "create-drop"
-		//dbCreate = "update"
-	//	url = "jdbc:mysql://localhost/mychild"
-      //  	username = "root"
-		//	password = "admin"
+    	//      url="jdbc:mysql://prodmain.cdd6wlpmn6gf.ap-southeast-1.rds.amazonaws.com:3306/prod?user=gimmedev&password=gimmepwd"
+       dbCreate = "create-drop"
+	
+		url = "jdbc:mysql://localhost/mychild"
+      	username = "root"
+			password = "admin"
 			properties {
 				validationQuery = "SELECT 1"
 				testOnBorrow = true
