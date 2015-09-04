@@ -20,7 +20,7 @@ class StudentDetailsController extends RestfulController  {
 	private static final String ROLE_ADMIN = 'ROLE_ADMIN'
 	
 	@Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
-	def forgetPassowrd(){
+	def forgetPassword(){
 		String emailId = params.emailId
 	//	String newPassword = params.password_new
 		println "test this {{emailId}}"

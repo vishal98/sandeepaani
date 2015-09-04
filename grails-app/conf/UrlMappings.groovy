@@ -401,7 +401,7 @@ class UrlMappings {
 								{
 									controller = "conversation"
 									action = "deleteConversation"
-			
+								}
 			
 						//  Teacher events
 			
@@ -661,7 +661,7 @@ re
 		  
 		  
 		 
-		  
+								
 		
 			
 		}

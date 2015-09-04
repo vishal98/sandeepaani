@@ -223,7 +223,7 @@ def tagsM
 				//if(grade.gradetags!=null){
 					//tagList<<grade.gradetags
 				//}else{
-				if(grade!=null&& grade.students!=null && grade.students.size()>O){
+				if(grade!=null&& grade.students!=null && grade.students.size()>0){
 				grade.students.each{
 					if(it.getFather()!=null){
 						tagList<<it.getFather().username
